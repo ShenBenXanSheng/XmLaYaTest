@@ -547,7 +547,11 @@ class PlayerFragment : BaseFragment() {
             }
             return false
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        playerPopupWindow.dismiss()
     }
 
     override fun onDestroy() {
