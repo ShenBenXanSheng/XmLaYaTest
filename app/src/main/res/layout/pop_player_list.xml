@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:shenben="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="popPlayModeColor"
+            type="Integer" />
+
+        <variable
+            name="popPlayAscColor"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/pop_container"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@drawable/shape_player_list"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:id="@+id/pop_play_mode_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                shenben:play_mode_color="@{popPlayModeColor}">
+
+                <ImageView
+                    android:id="@+id/pop_play_mode_iv"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:tint="@color/sienna"
+                    android:src="@mipmap/player_mode_listplay_click"
+                    />
+
+                <TextView
+                    android:id="@+id/pop_play_mode_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="列表播放"
+                    android:textColor="@color/sienna"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pop_play_asc_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal"
+                shenben:play_asc_color="@{popPlayAscColor}"
+                >
+
+                <ImageView
+                    android:id="@+id/pop_play_asc_iv"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/player_playasc_click"
+                    app:tint="@color/sienna"/>
+
+                <TextView
+                    android:id="@+id/pop_play_asc_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="正序播放"
+                    android:textColor="@color/sienna"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pop_rv"
+            android:background="#9d9d9d"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:overScrollMode="never"
+             />
+
+        <TextView
+            android:id="@+id/pop_dismiss"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="关闭"
+
+            android:textSize="18sp" />
+    </LinearLayout>
+</layout>

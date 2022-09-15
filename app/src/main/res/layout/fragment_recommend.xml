@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:shenben="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="RecommendPlayerButtonColor"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical">
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/recommend_smart_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="11">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recommendRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#efefef"
+                android:overScrollMode="never" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/recommend_player_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/recommend_player_cover"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/xiaogong" />
+
+            <LinearLayout
+                android:id="@+id/recommend_player_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@id/recommend_player_cover"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/recommend_player_title"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:singleLine="true"
+                    android:text="快去播放音乐吧！"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/recommend_player_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="暂无"
+                    android:layout_marginTop="3dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/recommend_player_playOrPause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/player_button"
+                shenben:recommend_pbc="@{RecommendPlayerButtonColor}"/>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</layout>

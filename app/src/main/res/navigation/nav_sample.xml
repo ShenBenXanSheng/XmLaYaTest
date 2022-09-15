@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_sample.xml"
+    app:startDestination="@id/home_fragmment">
+
+    <fragment
+        android:id="@+id/home_fragmment"
+        android:name="com.example.ximalaya.fragment.HomeFragment" />
+
+
+    <fragment
+        android:id="@+id/recommend_fragment"
+        android:name="com.example.ximalaya.fragment.RecommendFragment" >
+        <action android:id="@+id/recommend_to_detail"
+            app:destination="@id/detail_fragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_fragment"
+        android:name="com.example.ximalaya.fragment.DetailFragment">
+        <action
+            android:id="@+id/detail_to_player"
+            app:destination="@id/player_fragment"
+            app:enterAnim="@anim/fragment_enter"
+            app:exitAnim="@anim/fragment_exit"
+            app:popEnterAnim="@anim/fragment_pop_enter"
+            app:popExitAnim="@anim/fragment_pop_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/player_fragment"
+        android:name="com.example.ximalaya.fragment.PlayerFragment" />
+
+</navigation>

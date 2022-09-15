@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/search_first_content"
+            layout="@layout/state_go_search"
+            android:visibility="gone" />
+
+        <com.example.ximalaya.view.SearchFlowLayout
+            android:id="@+id/search_flow_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_suggest_word_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+<com.scwang.smart.refresh.layout.SmartRefreshLayout
+    android:id="@+id/search_smart_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_content_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+</com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+    </LinearLayout>
+</layout>

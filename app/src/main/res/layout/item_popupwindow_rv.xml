@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="playerPopData"
+            type="com.example.ximalaya.domian.PlayerPopupWinItemData" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/pop_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/pop_item_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@{playerPopData.number}"
+                android:layout_gravity="center"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/pop_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{playerPopData.title}"
+                android:layout_gravity="center"
+                android:textSize="14sp"
+                android:maxLines="2"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+    </LinearLayout>
+</layout>

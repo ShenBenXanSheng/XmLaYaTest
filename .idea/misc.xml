@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/background_round.xml" value="0.1355" />
+        <entry key="app/src/main/res/drawable/selector_flow_text.xml" value="0.1285" />
+        <entry key="app/src/main/res/drawable/shape_background_round.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/shape_detail_sub_buttom.xml" value="0.1355" />
+        <entry key="app/src/main/res/drawable/shape_flow_text.xml" value="0.1285" />
+        <entry key="app/src/main/res/drawable/shape_flow_text_passed.xml" value="0.1285" />
+        <entry key="app/src/main/res/drawable/shape_player_list.xml" value="0.127" />
+        <entry key="app/src/main/res/layout/activity_base.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/activity_detail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_detail_container.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_player.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_search_success.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/dialog_ximalaya_all.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_base.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.18206521739130435" />
+        <entry key="app/src/main/res/layout/fragment_history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_recommend.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_recommend_container.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/fragment_subscribe.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/item_history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_mian_tab.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_player_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_player_page.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/item_popupwindow_rv.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_recommend.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_recommend_detail.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_search_flow_text.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_suggest.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/pop_player_list.xml" value="0.18206521739130435" />
+        <entry key="app/src/main/res/layout/state_empty.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/state_error.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/state_go_search.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/state_loading.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/state_login.xml" value="0.25" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

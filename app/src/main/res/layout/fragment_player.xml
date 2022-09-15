@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="playModeColor"
+            type="Integer" />
+
+        <variable
+            name="playPreColor"
+            type="Integer" />
+
+        <variable
+            name="playOrPauseColor"
+            type="Integer" />
+
+        <variable
+            name="playNextColor"
+            type="Integer" />
+
+        <variable
+            name="playListColor"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.PlayerFragment">
+
+        <TextView
+            android:id="@+id/player_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/player_viewpage"
+
+            android:gravity="center"
+            android:text="我是标题"
+            android:textSize="18sp" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/player_viewpage"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_centerInParent="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/player_playStartTime_tv"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+
+                    android:text="00:00" />
+
+                <SeekBar
+                    android:id="@+id/player_playSeekBar"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/player_playEndTime_tv"
+                    android:layout_toEndOf="@id/player_playStartTime_tv"
+                    android:progressTint="@color/sienna"
+
+                    android:thumbTint="@color/sienna" />
+
+                <TextView
+                    android:id="@+id/player_playEndTime_tv"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+
+                    android:text="1:22:00" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/pop_play_mode_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/player_playMode_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="1.5"
+                    android:src="@mipmap/player_mode_listplay_click"
+                    app:playMode_color="@{playModeColor}" />
+
+                <ImageView
+                    android:id="@+id/player_playPre_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@mipmap/play_last_click"
+                    app:playPre_color="@{playPreColor}"
+                    app:tint="@color/sienna" />
+
+                <ImageView
+                    android:id="@+id/player_playStartOrPause_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/player_button"
+                    app:playOrPause_color="@{playOrPauseColor}"
+                    app:tint="@color/sienna" />
+
+                <ImageView
+                    android:id="@+id/player_playNext_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@mipmap/play_next_click"
+                    app:playNext_color="@{playNextColor}"
+                    app:tint="@color/sienna" />
+
+                <ImageView
+                    android:id="@+id/player_playList_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1.5"
+                    android:src="@mipmap/player_playlist_click"
+                    app:playList_color="@{playListColor}"
+                    app:tint="@color/sienna" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>
