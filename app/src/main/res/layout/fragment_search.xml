@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/gray"
         android:orientation="vertical"
-        tools:context=".activity.SearchFragment">
+        tools:context=".fragment.SearchFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/search_toolbar"

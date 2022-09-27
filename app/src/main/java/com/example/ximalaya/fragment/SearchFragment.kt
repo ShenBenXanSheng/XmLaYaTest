@@ -1,4 +1,4 @@
-package com.example.ximalaya.activity
+package com.example.ximalaya.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -12,7 +12,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,10 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ximalaya.R
 import com.example.ximalaya.adapter.AlbumAdapter
 import com.example.ximalaya.adapter.SuggestAdapter
-import com.example.ximalaya.base.BaseViewModelActivity
 import com.example.ximalaya.base.BaseViewModelFragment
-import com.example.ximalaya.databinding.ActivitySearchBinding
-import com.example.ximalaya.databinding.ActivitySearchSuccessBinding
+
+import com.example.ximalaya.databinding.FragmentSearchBinding
+import com.example.ximalaya.databinding.FragmentSearchSuccessBinding
+
 import com.example.ximalaya.domian.MyAlbumData
 import com.example.ximalaya.room.AlbumData
 import com.example.ximalaya.utils.Constant
@@ -42,8 +42,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SearchFragment : BaseViewModelFragment<SearchViewModel>() {
-    private lateinit var searchSuccessBinding: ActivitySearchSuccessBinding
-    private lateinit var searchBinding: ActivitySearchBinding
+    private lateinit var searchSuccessBinding: FragmentSearchSuccessBinding
+    private lateinit var searchBinding: FragmentSearchBinding
 
     private val flowList = mutableListOf<String>()
 
@@ -57,7 +57,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel>() {
 
     override fun getSuccessFragmentView(rootFrameLayout: FrameLayout): View {
         searchSuccessBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()),
-            R.layout.activity_search_success,
+            R.layout.fragment_search_success,
             rootFrameLayout,
             false)
         return searchSuccessBinding.root
@@ -67,7 +67,7 @@ class SearchFragment : BaseViewModelFragment<SearchViewModel>() {
 
     override fun getRootView(inflater: LayoutInflater, container: ViewGroup?): View {
         searchBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()),
-            R.layout.activity_search,
+            R.layout.fragment_search,
             container,
             false)
         return searchBinding.root
