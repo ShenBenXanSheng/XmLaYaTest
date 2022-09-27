@@ -12,11 +12,13 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.ximalaya.R
 import com.example.ximalaya.adapter.PlayPageAdapter
@@ -126,7 +128,7 @@ class PlayerFragment : BaseFragment() {
         return dataBinding.root
     }
 
-
+    private lateinit var backPressedCallback: OnBackPressedCallback
     override fun initView() {
         dispatchViewState(FragmentStatus.SUCCESS)
 
@@ -216,6 +218,14 @@ class PlayerFragment : BaseFragment() {
 
             }
         }
+
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.detail_fragment)
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(backPressedCallback)
     }
 
 
@@ -553,6 +563,12 @@ class PlayerFragment : BaseFragment() {
         super.onDestroyView()
         playerPopupWindow.dismiss()
     }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        backPressedCallback.isEnabled = !hidden
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()

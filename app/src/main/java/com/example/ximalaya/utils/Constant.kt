@@ -1,6 +1,7 @@
 package com.example.ximalaya.utils
 
 object Constant {
+
     const val TAB_TITLE_SIZE = 3
     const val RECOMMEND_FRAGMENT_CONTROL = 0
     const val SUBSCRIBE_FRAGMENT_CONTROL = 1
@@ -25,5 +26,9 @@ object Constant {
     const val SEARCH_SP_KEY = "searchSp"
 
     const val SEARCH_HISTORY = "searchHistory"
+
+
+
+    const val INTO_DETAIL: String = "into_detail"
 
 }

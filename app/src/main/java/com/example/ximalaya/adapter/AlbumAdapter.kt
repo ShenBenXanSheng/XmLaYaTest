@@ -15,6 +15,7 @@ import com.example.ximalaya.R
 import com.example.ximalaya.databinding.ItemRecommendBinding
 import com.example.ximalaya.domian.MyAlbumData
 import com.example.ximalaya.domian.RecommendAlbum
+import com.ximalaya.ting.android.opensdk.model.album.Album
 
 class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.InnerHolder>() {
     private lateinit var onRecommendItemClickListener: OnRecommendItemClickListener
@@ -75,6 +76,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.InnerHolder>() {
                     setOnClickListener {
                         onRecommendItemClickListener.onRecommendItemClick(album.id.toInt(), album)
 
+
                     }
                     setOnLongClickListener {
                         onRecommendItemClickListener.onRecommendLongClick(album)
@@ -82,6 +84,8 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.InnerHolder>() {
                         true
                     }
                 }
+
+
             }
         }
     }
@@ -109,6 +113,7 @@ class AlbumAdapter : RecyclerView.Adapter<AlbumAdapter.InnerHolder>() {
         this.onRecommendItemClickListener = onRecommendItemClickListener
 
     }
+
 
     interface OnRecommendItemClickListener {
         fun onRecommendItemClick(albumId: Int, album: MyAlbumData)

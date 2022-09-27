@@ -21,7 +21,7 @@ class RecommendViewModel : ViewModel() {
 
     val recommendStatusLive = MutableLiveData<RecommendStatus>()
 
-    val albumLiveList = MutableLiveDataStatus<List<Album>>()
+    val albumLiveList = MutableLiveData<List<Album>>()
 
     fun getRecommendData() {
 

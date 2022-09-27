@@ -8,6 +8,7 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModelProvider
@@ -75,12 +76,19 @@ class RecommendFragment : BaseViewModelFragment<RecommendViewModel>() {
     }
 
     private lateinit var fromDetailAlbum: MyAlbumData
+
+    private lateinit var backPressedCallback: OnBackPressedCallback
     override fun initView() {
+
+
+
         dataBinding.apply {
             recommendRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = albumAdapter
             }
+
+            mViewModel?.getRecommendData()
 
             recommendSmartRefresh.apply {
                 setRefreshHeader(MaterialHeader(requireContext()))
@@ -93,6 +101,13 @@ class RecommendFragment : BaseViewModelFragment<RecommendViewModel>() {
 
             recommendPlayerTitle.isSelected = true
         }
+
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(backPressedCallback)
     }
 
     override fun reload() {
@@ -124,14 +139,7 @@ class RecommendFragment : BaseViewModelFragment<RecommendViewModel>() {
                     albumAdapter.setData(myAlbumDataList)
                 }
 
-                albumLiveList.observeStatus(viewLifecycleOwner) {
-                    when (it) {
-                        LiveDataStatus.RESET -> {
-                            mViewModel?.getRecommendData()
-                        }
-                        else -> {}
-                    }
-                }
+
 
                 recommendStatusLive.observe(this@RecommendFragment) {
                     when (it) {
@@ -217,7 +225,7 @@ class RecommendFragment : BaseViewModelFragment<RecommendViewModel>() {
                     val bundle = Bundle()
                     bundle.putInt(Constant.PUT_ALBUM_ID, albumId)
                     bundle.putParcelable(Constant.PUT_ALBUM, album)
-
+                    bundle.putString(Constant.INTO_DETAIL, "recommend")
                     findNavController().navigate(R.id.detail_fragment, bundle)
 
                 }
@@ -318,21 +326,21 @@ class RecommendFragment : BaseViewModelFragment<RecommendViewModel>() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        requireActivity().window.apply {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
-            statusBarColor = context.getColor(R.color.mainColor)
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;
-
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden){
+            requireActivity().window.apply {
+                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = context.getColor(R.color.mainColor)
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;
+            }
         }
-    }
 
-    override fun onPause() {
-        super.onPause()
-        mViewModel = null
+
+        backPressedCallback.isEnabled = !hidden
+
     }
 
 

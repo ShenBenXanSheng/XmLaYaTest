@@ -32,4 +32,8 @@
         android:id="@+id/player_fragment"
         android:name="com.example.ximalaya.fragment.PlayerFragment" />
 
+
+    <fragment android:id="@+id/search_fragment"
+         android:name="com.example.ximalaya.activity.SearchFragment"/>
+
 </navigation>

@@ -26,9 +26,9 @@ class DetailViewModel : ViewModel() {
         LOADING, SUCCESS, ERROR, EMPTY, LOAD_MORE_SUCCESS, LOAD_MORE_ERROR, LOAD_MORE_EMPTY
     }
 
-    var isFirstLoad = true
+
     fun getDetailData(albumId: Int) {
-        if (isFirstLoad) {
+
             this.currentAlbumId = albumId
             trackLiveState.postValue(DetailLoadStatus.LOADING)
             detailRepository.getDetailData(object : IDataCallBack<TrackList> {
@@ -49,8 +49,7 @@ class DetailViewModel : ViewModel() {
 
             }, albumId.toString(), detailPage)
 
-            isFirstLoad = !isFirstLoad
-        }
+
     }
 
     fun getCurrentAlbum(album: MyAlbumData) {
@@ -76,7 +75,7 @@ class DetailViewModel : ViewModel() {
 
         }, currentAlbumId.toString(), detailPage)
 
-        isFirstLoad = true
+
     }
 
 

@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -129,7 +130,11 @@ class DetailFragment : BaseViewModelFragment<DetailViewModel>() {
 
     private lateinit var currentTrack: Track
 
+    private lateinit var backPressedCallback: OnBackPressedCallback
+
+    private var whoIntoDetail = ""
     override fun initView() {
+
         requireActivity().window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -148,6 +153,9 @@ class DetailFragment : BaseViewModelFragment<DetailViewModel>() {
                 detailViewModel.getCurrentAlbum(currentAlbum)
             }
 
+
+            whoIntoDetail = currentArg.getString(Constant.INTO_DETAIL).toString()
+
         }
 
         dataBinding.apply {
@@ -164,7 +172,21 @@ class DetailFragment : BaseViewModelFragment<DetailViewModel>() {
 
         playViewModel.isPlaying()
 
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when (whoIntoDetail) {
+                    "recommend" -> {
+                        findNavController().navigate(R.id.home_fragmment)
+                    }
 
+                    "search" -> {
+                        findNavController().navigate(R.id.search_fragment)
+                    }
+                }
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(backPressedCallback)
     }
 
 
@@ -440,11 +462,20 @@ class DetailFragment : BaseViewModelFragment<DetailViewModel>() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (detailViewModel.isFirstLoad == false) {
-            detailViewModel.isFirstLoad = true
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden){
+            requireActivity().window.apply {
+                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = context.getColor(R.color.transparent)
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;
+
+            }
         }
+
+
+        backPressedCallback.isEnabled = !hidden
     }
 
 

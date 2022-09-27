@@ -1,7 +1,6 @@
 package com.example.ximalaya.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ximalaya.R
-import com.example.ximalaya.activity.SearchActivity
 import com.example.ximalaya.adapter.MainViewPageAdapter
 
 import com.example.ximalaya.databinding.FragmentHomeBinding
@@ -28,12 +27,13 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         dataBinding = FragmentHomeBinding.inflate(layoutInflater)
         initView()
         return dataBinding.root
     }
+
     private fun initView() {
 
         mainViewPageAdapter = MainViewPageAdapter(childFragmentManager, lifecycle)
@@ -59,8 +59,10 @@ class HomeFragment : Fragment() {
 
 
             mainSearchIv.setOnClickListener {
-                val intent = Intent(requireContext(), SearchActivity::class.java)
-                startActivity(intent)
+
+
+                findNavController().navigate(R.id.search_fragment)
+
             }
 
         }

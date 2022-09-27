@@ -1,25 +1,31 @@
 package com.example.ximalaya.activity
 
-import android.content.Intent
+import android.content.Context
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ximalaya.R
 import com.example.ximalaya.adapter.AlbumAdapter
 import com.example.ximalaya.adapter.SuggestAdapter
 import com.example.ximalaya.base.BaseViewModelActivity
+import com.example.ximalaya.base.BaseViewModelFragment
 import com.example.ximalaya.databinding.ActivitySearchBinding
 import com.example.ximalaya.databinding.ActivitySearchSuccessBinding
 import com.example.ximalaya.domian.MyAlbumData
-import com.example.ximalaya.fragment.DetailFragment
 import com.example.ximalaya.room.AlbumData
 import com.example.ximalaya.utils.Constant
 import com.example.ximalaya.utils.KeyboardUtil
@@ -35,35 +41,34 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
+class SearchFragment : BaseViewModelFragment<SearchViewModel>() {
     private lateinit var searchSuccessBinding: ActivitySearchSuccessBinding
     private lateinit var searchBinding: ActivitySearchBinding
 
     private val flowList = mutableListOf<String>()
 
     private val sharedPreferences by lazy {
-        getSharedPreferences(Constant.SEARCH_SP_KEY, MODE_PRIVATE)
+        requireActivity().getSharedPreferences(Constant.SEARCH_SP_KEY, Context.MODE_PRIVATE)
     }
 
     private val xmDialog by lazy {
-        DialogControl(this)
+        DialogControl(requireContext())
     }
 
-    override fun addSuccessView(frameLayout: FrameLayout): View {
-        searchSuccessBinding = DataBindingUtil.inflate(LayoutInflater.from(this),
+    override fun getSuccessFragmentView(rootFrameLayout: FrameLayout): View {
+        searchSuccessBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()),
             R.layout.activity_search_success,
-            frameLayout,
+            rootFrameLayout,
             false)
         return searchSuccessBinding.root
     }
 
+    
 
-    override fun setViewModel() = SearchViewModel::class.java
-
-    override fun setRootViewId(): View {
-        searchBinding = DataBindingUtil.inflate(LayoutInflater.from(this),
+    override fun getRootView(inflater: LayoutInflater, container: ViewGroup?): View {
+        searchBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()),
             R.layout.activity_search,
-            null,
+            container,
             false)
         return searchBinding.root
     }
@@ -81,8 +86,11 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
     }
 
     private val subTitleList = mutableListOf<String>()
+
+    private lateinit var backPressedCallback: OnBackPressedCallback
+
     override fun initView() {
-        switchUpdateActivityState(ActivityState.SUCCESS)
+        dispatchViewState(FragmentStatus.SUCCESS)
 
 
         val stringSet = sharedPreferences.getStringSet(Constant.SEARCH_HISTORY, null)
@@ -102,23 +110,31 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 searchFlowLayout.visibility = View.GONE
             }
 
-            searchSuggestWordRv.layoutManager = LinearLayoutManager(this@SearchActivity)
+            searchSuggestWordRv.layoutManager = LinearLayoutManager(requireContext())
             searchSuggestWordRv.adapter = suggestAdapter
 
 
             searchSmartRefresh.apply {
                 setEnableRefresh(false)
                 setEnableLoadMore(true)
-                setRefreshFooter(ClassicsFooter(this@SearchActivity))
+                setRefreshFooter(ClassicsFooter(requireContext()))
             }
 
-            searchContentRv.layoutManager = LinearLayoutManager(this@SearchActivity)
+            searchContentRv.layoutManager = LinearLayoutManager(requireContext())
             searchContentRv.adapter = searchAlbumAdapter
         }
 
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.home_fragmment)
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(backPressedCallback)
 
     }
 
+  
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun TextView.textWatchFlow() = callbackFlow<String> {
         val textWatcher = object : TextWatcher {
@@ -144,7 +160,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                             searchCancelIv.visibility = View.GONE
                             searchSuggestWordRv.visibility = View.GONE
                             searchSmartRefresh.visibility = View.GONE
-                            switchUpdateActivityState(ActivityState.SUCCESS)
+                            dispatchViewState(FragmentStatus.SUCCESS)
                             if (flowList.size != 0) {
                                 searchFlowLayout.visibility = View.VISIBLE
                             } else {
@@ -176,13 +192,13 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
                 searchToolbar.setNavigationOnClickListener {
 
-                    finish()
+                    findNavController().navigate(R.id.home_fragmment)
                 }
                 searchInputEt.setOnEditorActionListener { v, actionId, event ->
                     if (v.text.toString().isNotEmpty()) {
                         flowTextListCanBeAdd(v.text.toString(), null)
 
-                        KeyboardUtil.hideKeyboard(this@SearchActivity, searchInputEt)
+                        KeyboardUtil.hideKeyboard(requireContext(), searchInputEt)
 
                         lifecycleScope.launch {
                             searchFlow(v.text.toString()).collect {
@@ -215,6 +231,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                     searchInputEt.textWatchFlow().collect {
                         mViewModel?.getSuggestWords(it)
                     }
+
                 }
 
                 searchFlowLayout.setOnSearchFlowItemClickListener(object :
@@ -237,13 +254,13 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
                 searchCancelIv.setOnClickListener {
                     searchInputEt.setText("")
-                    switchUpdateActivityState(ActivityState.SUCCESS)
+                    dispatchViewState(FragmentStatus.SUCCESS)
                 }
 
                 suggestAdapter.setOnSuggestItemClickListener(object :
                     SuggestAdapter.OnSuggestItemClickListener {
                     override fun onSuggestClick(text: String) {
-                        KeyboardUtil.hideKeyboard(this@SearchActivity, searchSuggestWordRv)
+                        KeyboardUtil.hideKeyboard(requireContext(), searchSuggestWordRv)
                         searchInputEt.setText(text)
                         searchInputEt.setSelection(text.length)
                         lifecycleScope.launch {
@@ -260,62 +277,69 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
                 })
 
-                searchAlbumAdapter.setOnRecommendItemClickListener(object :
-                    AlbumAdapter.OnRecommendItemClickListener {
-                    override fun onRecommendItemClick(albumId: Int, album: MyAlbumData) {
-                        val intent = Intent(this@SearchActivity, DetailFragment::class.java)
-                        intent.putExtra(Constant.PUT_ALBUM_ID, albumId)
-                        intent.putExtra(Constant.PUT_ALBUM, album)
-                        startActivity(intent)
-                    }
+                        searchAlbumAdapter.setOnRecommendItemClickListener(object :
+                            AlbumAdapter.OnRecommendItemClickListener {
+                            override fun onRecommendItemClick(albumId: Int, album: MyAlbumData) {
+                                val bundle = Bundle()
 
-                    override fun onRecommendLongClick(album: MyAlbumData) {
-                        xmDialog.apply {
-                            if (subTitleList.size == 0) {
+                                bundle.putInt(Constant.PUT_ALBUM_ID, albumId)
+                                bundle.putParcelable(Constant.PUT_ALBUM, album)
+                                bundle.putString(Constant.INTO_DETAIL,"search")
+                                findNavController().navigate(R.id.detail_fragment, bundle)
 
-                                upDateDialogState(DialogControl.DialogStatus.ADD)
-                                setOnDialogAddClickListener(object :
-                                    DialogControl.OnDialogAddClickListener {
-                                    override fun onAddClick() {
-                                        val albumData = AlbumData(album.albumTitle,
-                                            album.id.toInt(),
-                                            album.coverUrlMiddle,
-                                            album.albumIntro,
-                                            album.playCount.toString(),
-                                            album.includeTrackCount.toString())
-                                        subscribeViewModel.insertAlbum(albumData)
 
-                                        Toast.makeText(this@SearchActivity,"添加成功",Toast.LENGTH_SHORT).show()
-                                    }
 
-                                })
-                            } else {
-                                if (subTitleList.contains(album.albumTitle)) {
-                                    upDateDialogState(DialogControl.DialogStatus.IS_ADD)
-                                } else {
-                                    upDateDialogState(DialogControl.DialogStatus.ADD)
-                                    setOnDialogAddClickListener(object :
-                                        DialogControl.OnDialogAddClickListener {
-                                        override fun onAddClick() {
-                                            val albumData = AlbumData(album.albumTitle,
-                                                album.id.toInt(),
-                                                album.coverUrlMiddle,
-                                                album.albumIntro,
-                                                album.playCount.toString(),
-                                                album.includeTrackCount.toString())
-                                            subscribeViewModel.insertAlbum(albumData)
-                                            Toast.makeText(this@SearchActivity,"添加成功",Toast.LENGTH_SHORT).show()
-                                        }
-
-                                    })
-                                }
                             }
 
-                            show()
-                        }
+                            override fun onRecommendLongClick(album: MyAlbumData) {
+                                xmDialog.apply {
+                                    if (subTitleList.size == 0) {
 
-                    }
+                                        upDateDialogState(DialogControl.DialogStatus.ADD)
+                                        setOnDialogAddClickListener(object :
+                                            DialogControl.OnDialogAddClickListener {
+                                            override fun onAddClick() {
+                                                val albumData = AlbumData(album.albumTitle,
+                                                    album.id.toInt(),
+                                                    album.coverUrlMiddle,
+                                                    album.albumIntro,
+                                                    album.playCount.toString(),
+                                                    album.includeTrackCount.toString())
+                                                subscribeViewModel.insertAlbum(albumData)
 
+                                                Toast.makeText(requireContext(),
+                                                    "添加成功",
+                                                    Toast.LENGTH_SHORT).show()
+                                            }
+
+                                        })
+                                    } else {
+                                        if (subTitleList.contains(album.albumTitle)) {
+                                            upDateDialogState(DialogControl.DialogStatus.IS_ADD)
+                                        } else {
+                                            upDateDialogState(DialogControl.DialogStatus.ADD)
+                                            setOnDialogAddClickListener(object :
+                                                DialogControl.OnDialogAddClickListener {
+                                                override fun onAddClick() {
+                                                    val albumData = AlbumData(album.albumTitle,
+                                                        album.id.toInt(),
+                                                        album.coverUrlMiddle,
+                                                        album.albumIntro,
+                                                        album.playCount.toString(),
+                                                        album.includeTrackCount.toString())
+                                                    subscribeViewModel.insertAlbum(albumData)
+                                                    Toast.makeText(requireContext(),
+                                                        "添加成功",
+                                                        Toast.LENGTH_SHORT).show()
+                                                }
+
+                                            })
+                                        }
+                                    }
+
+                                    show()
+                                }
+                            }
                 })
             }
         }
@@ -325,11 +349,11 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
     override fun initDataListener() {
         super.initDataListener()
         mViewModel?.apply {
-            suggestWordsListLiveData.observe(this@SearchActivity) {
+            suggestWordsListLiveData.observe(this@SearchFragment) {
                 suggestAdapter.setData(it.keyWordList)
             }
 
-            searchAlbumLiveData.observe(this@SearchActivity) {
+            searchAlbumLiveData.observe(this@SearchFragment) {
                 val myAlbumList: MutableList<MyAlbumData> = mutableListOf()
                 it.albums.forEach { album ->
                     val myAlbumData = MyAlbumData(album.albumTitle,
@@ -344,28 +368,28 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 searchAlbumAdapter.setData(myAlbumList)
             }
 
-            searchAlbumStateLiveData.observe(this@SearchActivity) {
+            searchAlbumStateLiveData.observe(this@SearchFragment) {
                 when (it) {
                     SearchViewModel.SearchAlbumLoadStatus.LOADING -> {
-                        switchUpdateActivityState(ActivityState.LOADING)
+                        dispatchViewState(FragmentStatus.LOADING)
                     }
 
                     SearchViewModel.SearchAlbumLoadStatus.SUCCESS -> {
-                        switchUpdateActivityState(ActivityState.SUCCESS)
+                        dispatchViewState(FragmentStatus.SUCCESS)
                     }
 
                     SearchViewModel.SearchAlbumLoadStatus.EMPTY -> {
-                        switchUpdateActivityState(ActivityState.EMPTY)
+                        dispatchViewState(FragmentStatus.EMPTY)
                     }
 
                     SearchViewModel.SearchAlbumLoadStatus.ERROR -> {
-                        switchUpdateActivityState(ActivityState.ERROR)
+                        dispatchViewState(FragmentStatus.ERROR)
                     }
                     else -> {}
                 }
             }
 
-            searchAlbumLoadMoreLiveData.observe(this@SearchActivity) {
+            searchAlbumLoadMoreLiveData.observe(this@SearchFragment) {
 
                 val myAlbumList: MutableList<MyAlbumData> = mutableListOf()
                 it.albums.forEach { album ->
@@ -381,18 +405,18 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 searchAlbumAdapter.setLoadMoreData(myAlbumList)
             }
 
-            searchAlbumLoadMoreStateLiveData.observe(this@SearchActivity) {
+            searchAlbumLoadMoreStateLiveData.observe(this@SearchFragment) {
                 when (it) {
                     SearchViewModel.SearchAlbumLoadMoreStatus.SUCCESS -> {
-                        Toast.makeText(this@SearchActivity, "成功加载数据", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "成功加载数据", Toast.LENGTH_SHORT).show()
                     }
 
                     SearchViewModel.SearchAlbumLoadMoreStatus.ERROR -> {
-                        Toast.makeText(this@SearchActivity, "加载失败", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "加载失败", Toast.LENGTH_SHORT).show()
                     }
 
                     else -> {
-                        Toast.makeText(this@SearchActivity, "没有更多数据了", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "没有更多数据了", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -438,4 +462,23 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
         searchSuccessBinding.searchFlowLayout.setData(flowList)
     }
+
+    override fun getViewModelClass() = SearchViewModel::class.java
+
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden){
+            requireActivity().window.apply {
+                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+                statusBarColor = context.getColor(R.color.mainColor)
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;
+            }
+        }
+
+        backPressedCallback.isEnabled = !hidden
+    }
+
 }
