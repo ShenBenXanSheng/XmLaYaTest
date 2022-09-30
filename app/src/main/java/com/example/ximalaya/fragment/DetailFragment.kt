@@ -464,15 +464,16 @@ class DetailFragment : BaseViewModelFragment<DetailViewModel>() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (!hidden){
-            requireActivity().window.apply {
-                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                statusBarColor = context.getColor(R.color.transparent)
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE;
 
-            }
+
+
+        if (!hidden){
+            initView()
+            initDataListener()
+            initListener()
+
         }
+
 
 
         backPressedCallback.isEnabled = !hidden

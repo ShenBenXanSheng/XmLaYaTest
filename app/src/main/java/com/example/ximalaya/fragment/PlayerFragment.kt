@@ -566,6 +566,12 @@ class PlayerFragment : BaseFragment() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
+        if (!hidden){
+            initView()
+            initListener()
+            initDataListener()
+        }
+
         backPressedCallback.isEnabled = !hidden
     }
 
